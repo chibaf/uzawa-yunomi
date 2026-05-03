@@ -40,8 +40,8 @@ varf a (u1, u2)
           dx(u1)*dx(u2)
         + dy(u1)*dy(u2)
     )
-    + on(3, u1=1)
-    + on(1, 2, 4, u1=0) ;
+    + on(20, u1=0)
+    + on(1, 2, 3, u1=1) ;
 //remark: put the on(3,u1=1) before on(1,2,4,u1=0)
 //because we want zero on intersection
 
