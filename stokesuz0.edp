@@ -18,7 +18,7 @@ border C2(t=d2, H){x=w-d2; y=t; label=2;}
 border C3(t=w-d2,rpipe){x=t; y=H; label=3;}
 border Cpipe(t=H,d2){x=rpipe; y=t; label=12;}
 
-border D1(t=0, -pi)    {x=d+w1/2.0 + (w1/2.0)*cos(t); 
+border D1(t=-pi,0)    {x=d+w1/2.0 + (w1/2.0)*cos(t); 
                        y=S + (w1/2.0)*sin(t); label=20;}
 border D2(t=S, S+H1) {x=d+w1; y=t; label=20;}
 border D3(t=0, pi)    {x=d+w1/2.0 + (w1/2.0)*cos(t); 
@@ -33,7 +33,7 @@ border D4(t=S+H1, S)  {x=d; y=t; label=20;}
 // --- 3. メッシュ生成 ---
 //mesh Th = buildmesh(C1(20) + C2(80) + C3(20) + Cpipe(80)+ D1(-20) + D2(-60) + D3(-40) + D4(-60)); //+
 //E1(10)+E2(30)+E3(40)+E4(10)//+E5(80)+E6(20)
-mesh Th = buildmesh(C1(20) + C2(80) + C3(20) + Cpipe(80)+ D1(10) + D2(40) + D3(10) + D4(40)//+
+mesh Th = buildmesh(C1(20) + C2(80) + C3(20) + Cpipe(80)+ D1(-10) + D2(-40) + D3(-10) + D4(-40)//+
 //E1(20)+E2(30)+E3(80)+E4(20)//+E5(80)+E6(20)
 );
                     
@@ -105,5 +105,5 @@ LinearCG(divup, p[], eps=1.e-6, nbiter=50); //p_h^{n+1} = p_h^n + B u_h^n
 // if n> 50 or |p_h^{n+1} - p_h^n| <= 10^-6, then the loop end
 divup(p[]); //compute the final solution
 
-plot(p, wait=1, value=true, coef=0.1);
-//plot([u1, u2], p, wait=1, value=true, coef=0.1);
+//plot(p, wait=1, value=true, coef=0.1);
+plot([u1, u2], p, wait=1, value=true, coef=0.01);

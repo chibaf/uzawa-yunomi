@@ -31,79 +31,79 @@ border D4(t=S+H1, S)  {x=d; y=t; label=20;}
 //border E4(t=w,w-d2){x=t;y=H;label=30;}
 
 // --- 3. メッシュ生成 ---
-//mesh Th = buildmesh(C1(20) + C2(80) + C3(20) + Cpipe(80)+ D1(-20) + D2(-60) + D3(-40) + D4(-60)); //+
+mesh Th = buildmesh(C1(20) + C2(80) + C3(20) + Cpipe(80)+ D1(-20) + D2(-60) + D3(-40) + D4(-60)); //+
 //E1(10)+E2(30)+E3(40)+E4(10)//+E5(80)+E6(20)
-mesh Th = buildmesh(C1(20) + C2(80) + C3(20) + Cpipe(80)+ D1(10) + D2(40) + D3(10) + D4(40)//+
+//mesh Th = buildmesh(C1(20) + C2(80) + C3(20) + Cpipe(80)+ D1(-10) + D2(-40) + D3(-10) + D4(-40)//+
 //E1(20)+E2(30)+E3(80)+E4(20)//+E5(80)+E6(20)
-);
+//);
                     
 plot(Th,wait=1);
 
 // --- 4. 領域(Region)の自動取得 ---
-int regMain   = Th(rpipe + 0.01, H/2.0).region;       
-int regShroud = Th(d + w1/2.0, S + H1/2.0).region;   
-int regEdgeE  = Th(w - d2/2.0, d2/2.0).region;       
-real Vpump = 0.01;           //強制流速 [m/s]
-
+//int regMain   = Th(rpipe + 0.01, H/2.0).region;       
+//int regShroud = Th(d + w1/2.0, S + H1/2.0).region;   
+//int regEdgeE  = Th(w - d2/2.0, d2/2.0).region;       
+//real Vpump = 0.01;           強制流速 [m/s]
+//
 // Fespace
-fespace Xh(Th, P2);
-Xh u1, u2;
-Xh bc1, bc2;
-Xh b;
-
-fespace Mh(Th, P1);
-Mh p;
-Mh ppp; //ppp is a working pressure
-Xh fP = ( (x >= rpipe && x < d) && (y >= S+H1*0.05 && y <= S+H1*0.15) ) ? Vpump : 0.0;
-
-
+//fespace Xh(Th, P2);
+//Xh u1, u2;
+//Xh bc1, bc2;
+//Xh b;
+//
+//fespace Mh(Th, P1);
+//Mh p;
+//Mh ppp; ppp is a working pressure
+//Xh fP = ( (x >= rpipe && x < d) && (y >= S+H1*0.05 && y <= S+H1*0.15) ) ? Vpump : 0.0;
+//
+//
 // Problem
-varf bx (u1, q) = int2d(Th)(-(dx(u1)*q));
-varf by (u1, q) = int2d(Th)(-(dy(u1)*q));
-varf a (u1, u2)
-= int2d(Th)(
-          dx(u1)*dx(u2)
-        + dy(u1)*dy(u2)//-fP*u2
-    )
-    + on(1,2,3, u1=0) ;
+//varf bx (u1, q) = int2d(Th)(-(dx(u1)*q));
+//varf by (u1, q) = int2d(Th)(-(dy(u1)*q));
+//varf a (u1, u2)
+//= int2d(Th)(
+//          dx(u1)*dx(u2)
+//        + dy(u1)*dy(u2)-fP*u2
+//    )
+//    + on(1,2,3, u1=0) ;
 //    + on(1, u2=0.1);
 //    + on(2, 3,4, u2=0) ;
 //    + on(1, 2, 3,4, u1=0) ;
 //remark: put the on(3,u1=1) before on(1,2,4,u1=0)
 //because we want zero on intersection
-
-matrix A = a(Xh, Xh, solver=CG);
-matrix Bx = bx(Xh, Mh); //B=(Bx, By)
-matrix By = by(Xh, Mh);
-
-bc1[] = a(0,Xh);//+fP[]; //boundary condition contribution on u1
-bc2 = 0; //no boundary condition contribution on u2
-
+//
+//matrix A = a(Xh, Xh, solver=CG);
+//matrix Bx = bx(Xh, Mh); B=(Bx, By)
+//matrix By = by(Xh, Mh);
+//
+//bc1[] = a(0,Xh);+fP[]; //boundary condition contribution on u1
+//bc2 = 0; no boundary condition contribution on u2
+//
 //p_h^n -> B A^-1 - B^* p_h^n = -div u_h
 //is realized as the function divup
-func real[int] divup (real[int] & pp){
-    //compute u1(pp)
-    b[] = Bx'*pp;
-    b[] *= -1;
-    b[] += bc1[]+fP[];
-    u1[] = A^-1*b[];
-    //compute u2(pp)
-    b[] = By'*pp;
-    b[] *= -1;
-    b[] += bc2[];
-    u2[] = A^-1*b[];
-    //u^n = (A^-1 Bx^T p^n, By^T p^n)^T
-    ppp[] = Bx*u1[]; //ppp = Bx u_1
-    ppp[] += By*u2[]; //+ By u_2
-
-    return ppp[] ;
-}
-
+//func real[int] divup (real[int] & pp){
+//    compute u1(pp)
+//    b[] = Bx'*pp;
+//    b[] *= -1;
+//    b[] += bc1[]+fP[];
+//    u1[] = A^-1*b[];
+//    compute u2(pp)
+//    b[] = By'*pp;
+//    b[] *= -1;
+//    b[] += bc2[];
+//    u2[] = A^-1*b[];
+//    u^n = (A^-1 Bx^T p^n, By^T p^n)^T
+//    ppp[] = Bx*u1[]; ppp = Bx u_1
+//    ppp[] += By*u2[]; + By u_2
+//
+//    return ppp[] ;
+//}
+//
 // Initialization
-p=0; //p_h^0 = 0
-LinearCG(divup, p[], eps=1.e-6, nbiter=50); //p_h^{n+1} = p_h^n + B u_h^n
+//p=0; p_h^0 = 0
+//LinearCG(divup, p[], eps=1.e-6, nbiter=50); p_h^{n+1} = p_h^n + B u_h^n
 // if n> 50 or |p_h^{n+1} - p_h^n| <= 10^-6, then the loop end
-divup(p[]); //compute the final solution
-
-plot(p, wait=1, value=true, coef=0.1);
+//divup(p[]); compute the final solution
+//
+//plot(p, wait=1, value=true, coef=0.1);
 //plot([u1, u2], p, wait=1, value=true, coef=0.1);
