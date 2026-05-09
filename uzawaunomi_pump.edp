@@ -96,3 +96,4 @@ divup(p[]); // 最終的な流速場の更新
 
 // --- 7. 結果の表示 ---
 plot(p, wait=1, value=true, coef=0.1, cmm="Stokes Flow (Pipe Drive)");
+plot([u1,u2], wait=1, value=true, coef=0.1, cmm="Stokes Flow (Pipe Drive)");
