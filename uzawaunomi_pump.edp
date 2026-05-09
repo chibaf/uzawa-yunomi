@@ -52,8 +52,8 @@ varf vbc1(u1, v1) = int2d(Th)( dx(u1)*dx(v1) + dy(u1)*dy(v1) )
 
 // u2（y方向）用の境界条件設定：中心軸パイプ(label 12)で上向き流速 1、他は 0
 varf vbc2(u1, v1) = int2d(Th)( dx(u1)*dx(v1) + dy(u1)*dy(v1) )
-    + on(1, 2, 3, 20, u1=0) 
-    + on(12, u1=1); // ここで u1=1 と書くのが FreeFEM の varf のルール（未知関数を1に固定）
+    + on(1, 2, 3, 20, u1=0); 
+    //+ on(12, u1=1); // ここで u1=1 と書くのが FreeFEM の varf のルール（未知関数を1に固定）
 
 // B行列（発散/勾配項）
 varf vbx (u1, q) = int2d(Th)( -(dx(u1)*q) );
