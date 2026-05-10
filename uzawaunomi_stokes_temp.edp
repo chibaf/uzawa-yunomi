@@ -24,16 +24,30 @@ border D2(t=S, S+H1) {x=d+w1; y=t; label=20;}
 border D3(t=0, pi) {x=d+w1/2.0 + (w1/2.0)*cos(t); y=S+H1 + (w1/2.0)*sin(t); label=20;}
 border D4(t=S+H1, S) {x=d; y=t; label=20;}
 
-mesh Th = buildmesh(C1(20) + C2(80) + C3(20) + Cpipe(80) + D1(-10) + D2(-40) + D3(-10) + D4(-40));
+mesh Th  = buildmesh(C1(20) + C2(80) + C3(20) + Cpipe(80) + D1(-10) + D2(-40) + D3(-10) + D4(-40));
+mesh Th2 = buildmesh(C1(20) + C2(80) + C3(20) + Cpipe(80) + D1(10) + D2(40) + D3(10) + D4(40));
 plot(Th,wait=1);
+plot(Th2,wait=1);
 
 // --- 2. 有限要素空間の定義 ---
+fespace Ph(Th, P0);
+Ph kappa, field;
 fespace Xh(Th, P2);
+fespace Yh(Th, P2);
 Xh u1, u2;      // 半径方向流速(u1), 軸方向流速(u2)
+Yh T;
 Xh v1;          // テスト関数（共通で利用）
+Yh T2;
 Xh bc1, bc2;    // 境界条件ベクトル
 Xh b;           // 右辺ベクトル計算用
+real kFluid = 0.92, kShroud = 0.92;
+real kEdgeE = kFluid * 0.9; 
+real hOuter = 33.7e3, TExt = 500.0;
 real Vpump = 0.3;           //強制流速 [m/s]
+int regMain   = Th(rpipe + 0.01, H/2.0).region;       
+int regShroud = Th(d + w1/2.0, S + H1/2.0).region;   
+
+kappa = (region == regShroud) ? kShroud : kFluid;
 
 Xh fP = ( (x >= rpipe && x < d) && (y >= S+H1*0.05 && y <= S+H1*0.15) ) ? Vpump : 0.0;
 
