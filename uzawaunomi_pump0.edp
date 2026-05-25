@@ -108,9 +108,11 @@ divup(p[]); // 最終的な流速場の更新
 // --- 7. 結果の表示 ---
 plot(p, wait=1, value=true, coef=0.01, cmm="Stokes Flow (Pipe Drive)");
 plot([u1,u2], wait=1, value=true, coef=0.01, cmm="Stokes Flow (Pipe Drive)");
+// pressure
 int[int] Order = [1];
 string DataName = "p";
 savevtk("p.vtu", Th, p, dataname=DataName, order=Order);
+// vector field
 int[int] Order2 = [1];
 string DataName1 = "u1u2";
 savevtk("u1u2.vtu", Th, [u1,u2], dataname=DataName1, order=Order2);
