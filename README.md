@@ -4,6 +4,10 @@ Labels of boundaries
 
 <img width="266" height="398" alt="image" src="https://github.com/user-attachments/assets/4edccc9c-0d89-4015-aa4b-0e16f87e7203" />
 
+Mesh
+
+<img width="346" height="572" alt="image" src="https://github.com/user-attachments/assets/9e53fad4-b17b-434a-8109-9c1828f9ce82" />
+
 Solusion
 
 <img width="228" height="530" alt="image" src="https://github.com/user-attachments/assets/56da15d8-dc2b-4564-8d3a-aeb1fab2c925" />
